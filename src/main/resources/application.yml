@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: myplay-reservation
+  #profiles:
+    #active: default
+  #datasource:
+    #url: jdbc:h2:mem:testdb
+    #username: sa
+    #password:
+    #driver-class-name: org.h2.Driver
+  datasource:
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password: admin
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+        streams:
+          binder:
+            configuration:
+              default:
+                key:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+      bindings:
+        event-in:
+          group: myplay-reservation
+          destination: myplay
+          contentType: application/json
+        event-out:
+          destination: myplay
+          contentType: application/json
+server:
+  port: 8083
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE    
+
+api:
+  bff:
+    url: http://localhost:8080
+  member:
+    url: http://localhost:8081
+  playground:
+    url: http://localhost:8082
+  reservation:
+    url: http://localhost:8083
+  review:
+    url: http://localhost:8084
+  payment:
+    url: http://localhost:8085
+
